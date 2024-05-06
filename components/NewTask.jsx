@@ -14,6 +14,7 @@ function NewTask() {
   const [selectedDate, setSelectedDate] = useState()
   const [filter, setFilter] = useState("")
   const [activeDateTab, setActiveDateTab] = useState()
+
   const { data, isLoading } = useGetSubjectsQuery()
   const { data: tasks, isLoading: isTasksLoading } = useGetTasksQuery()
   const [addTask] = useAddTaskMutation()
@@ -44,7 +45,7 @@ function NewTask() {
           Для створення завдання створіть предмет...
         </p>
       )}
-      {!isLoading && data.length > 0 && (
+      {!isLoading && !isTasksLoading && data.length > 0 && (
         <div className='rounded-lg bg-white py-2 px-4'>
           <div className='relative'>
             <input
@@ -158,7 +159,8 @@ function NewTask() {
           </div>
         </div>
       )}
-      {!isLoading && <DashboardTaskList data={tasks} filterQuery={filter} category={false}/>}
+      {!isTasksLoading && <DashboardTaskList data={tasks} filterQuery={filter} category={false}/>}
+      
     </div>
   )
 }

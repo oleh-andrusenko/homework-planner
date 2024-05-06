@@ -1,6 +1,5 @@
 import FocusTimer from "@/components/FocusTimer"
 import NewTask from "@/components/NewTask"
-import SearchBar from "@/components/SearchBar"
 import Summary from "@/components/Summary"
 
 function DashboardPage() {

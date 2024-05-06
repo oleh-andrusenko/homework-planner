@@ -38,7 +38,7 @@ function Menu() {
 
         <li>
           <Link
-            href='/planner'
+            href='planner'
             className={
               pathname === "/dashboard/planner" ? activeLinkClasses : linkClasses
             }

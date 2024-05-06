@@ -1,16 +1,20 @@
 "use client"
-import { useCheckTaskMutation } from "@/redux/tasksApi"
+import { useCheckTaskMutation, useDeleteTaskMutation } from "@/redux/tasksApi"
 import React from "react"
+import { FaTrash } from "react-icons/fa"
 
 function TaskItem({ task }) {
-  console.log("task", task)
   const { color, name } = task.subject
   const [checkTask] = useCheckTaskMutation()
+  const [deleteTask] = useDeleteTaskMutation()
 
   const handleCheckTask = async () => {
     checkTask({ id: task._id, body: { status: !task.isDone } })
   }
 
+  const handleDeleteTask = async () => {
+    deleteTask(task._id)
+  }
   return (
     <li
       key={task._id}
@@ -38,6 +42,9 @@ function TaskItem({ task }) {
         </div>
       </div>
       <div className='w-[15%] text-green-a'>{task.date.slice(0, 10)}</div>
+      <button onClick={handleDeleteTask}>
+        <FaTrash className='text-red-400' />
+      </button>
     </li>
   )
 }
