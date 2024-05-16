@@ -6,7 +6,7 @@ export const tasksApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000/" }),
   endpoints: (build) => ({
     getTasks: build.query({
-      query: (id = "") => `tasks${id && `/${id}`}`,
+      query: (id) => `tasks/${id}`,
       providesTags: (result) =>
         result
           ? [
@@ -21,14 +21,14 @@ export const tasksApi = createApi({
         method: "POST",
         body,
       }),
-      invalidatesTags: [{ type: "Tasks", id: "LIST" }],
+      invalidatesTags: [{ type: "Tasks", id: "LIST" }, "Stats"],
     }),
     deleteTask: build.mutation({
       query: (id) => ({
         url: `tasks/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: [{ type: "Tasks", id: "LIST" }],
+      invalidatesTags: [{ type: "Tasks", id: "LIST" }, "Stats"],
     }),
     checkTask: build.mutation({
       query: ({ id, ...patch }) => ({
@@ -36,7 +36,7 @@ export const tasksApi = createApi({
         method: "PATCH",
         body: patch,
       }),
-      invalidatesTags: [{ type: "Tasks", id: "LIST" }],
+      invalidatesTags: [{ type: "Tasks", id: "LIST" }, "Stats"],
     }),
   }),
 })

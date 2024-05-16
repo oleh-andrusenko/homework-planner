@@ -1,34 +1,45 @@
 "use client"
 
 import { useRef, useState } from "react"
-import { FaArrowCircleRight, FaCalendar, FaClock, FaPlus } from "react-icons/fa"
-import { useAddTaskMutation, useGetTasksQuery } from "@/redux/tasksApi"
+import {
+  FaArrowCircleRight,
+  FaArrowLeft,
+  FaCalendar,
+  FaClock,
+  FaPlus,
+} from "react-icons/fa"
+import { useAddTaskMutation } from "@/redux/tasksApi"
 import { useGetSubjectsQuery } from "@/redux/subjectsApi"
-import DashboardTaskList from "./DashboardTaskList"
 import Loader from "./Loader"
-import SearchBar from "./SearchBar"
+import { useSession } from "next-auth/react"
+import { notifyError, notifySuccess } from "@/utils/notification"
 
 function NewTask() {
+  const { data: session } = useSession()
+
   const [taskTitle, setTaskTitle] = useState("")
   const [selectedSubject, setSelectedSubject] = useState()
-  const [selectedDate, setSelectedDate] = useState()
-  const [filter, setFilter] = useState("")
-  const [activeDateTab, setActiveDateTab] = useState()
+  const [selectedDate, setSelectedDate] = useState(new Date())
 
-  const { data, isLoading } = useGetSubjectsQuery()
-  const { data: tasks, isLoading: isTasksLoading } = useGetTasksQuery()
+  const [activeDateTab, setActiveDateTab] = useState(0)
+
+  const { data: subjects, isLoading } = useGetSubjectsQuery(session.user.email)
   const [addTask] = useAddTaskMutation()
   const dateRef = useRef(null)
 
   async function handleAddTask() {
-    addTask({
+    const res = await addTask({
+      userEmail: session.user.email,
       title: taskTitle,
       date: selectedDate,
-      subject: selectedSubject || data[0],
-    })
-    setTaskTitle("")
-    setActiveDateTab(null)
-    setSelectedDate(null)
+      subject: selectedSubject || subjects[0],
+    }).unwrap()
+    if (res.status === 201) {
+      notifySuccess("Завдання створено!")
+      setTaskTitle("")
+      setActiveDateTab(0)
+      setSelectedDate(new Date())
+    } else notifyError("При додаванні завдання сталась помилка!")
   }
 
   function handleDatePick() {
@@ -37,26 +48,29 @@ function NewTask() {
   }
 
   return (
-    <div className='w-full max-w-full flex flex-col '>
-      <SearchBar filter={filter} setFilter={setFilter} />
+    <div className='w-full max-w-full flex flex-col dark:bg-slate-800 rounded-lg'>
       {isLoading && <Loader />}
-      {!isLoading && data.length === 0 && (
-        <p className='w-full h-20'>
-          Для створення завдання створіть предмет...
+      {!isLoading && subjects.length === 0 && (
+        <p className='relative w-full flex items-center justify-center h-20 bg-white dark:bg-slate-800 dark:text-slate-50 rounded-lg text-lg'>
+          <FaArrowLeft className='absolute left-2  animate-pulse text-green-a' />
+          Для створення завдання створіть предмет в меню ліворуч😊
         </p>
       )}
-      {!isLoading && !isTasksLoading && data.length > 0 && (
-        <div className='rounded-lg bg-white py-2 px-4'>
+      {!isLoading && subjects.length > 0 && (
+        <div className='rounded-lg bg-white dark:bg-slate-800 py-2 px-4'>
           <div className='relative'>
             <input
               type='text'
               placeholder='Додати завдання...'
+              onKeyPress={(e) =>
+                e.key === "Enter" ? handleAddTask() : undefined
+              }
               value={taskTitle}
               onChange={(e) => setTaskTitle(e.target.value)}
-              className='h-1/2 w-full border-2 rounded-lg py-1 px-2 focus:outline-none focus:border-green-a'
+              className='h-1/2 w-full border-2 rounded-lg py-1 px-2 focus:outline-none focus:border-green-a dark:bg-slate-700 dark:text-slate-50'
             />
             <button
-              className='absolute right-2 bottom-2 text-green-a '
+              className='absolute right-2 bottom-2 text-green-a dark:text-slate-50 '
               onClick={handleAddTask}
             >
               <FaPlus />
@@ -64,31 +78,29 @@ function NewTask() {
           </div>
 
           <div className='flex items-center gap-2 mt-2'>
-            {!isLoading && data.length !== 0 && (
+            {!isLoading && subjects.length !== 0 && (
               <div className='px-2 py-1 border-2 rounded-lg flex items-center'>
                 <div
                   className='w-3 h-3 rounded-full '
                   style={{
-                    backgroundColor: selectedSubject?.color || data[0].color,
+                    backgroundColor:
+                      selectedSubject?.color || subjects[0].color,
                   }}
                 ></div>
 
                 <select
                   name='subject'
                   id='subject'
-                  className='w-30 truncate ... px-2'
+                  defaultValue={subjects[0]._id}
+                  className='w-30 truncate ... px-2 dark:bg-slate-800 dark:text-slate-50'
                   onChange={(e) => {
                     setSelectedSubject(
-                      data.filter((item) => item._id === e.target.value)[0]
+                      subjects.filter((item) => item._id === e.target.value)[0]
                     )
                   }}
                 >
-                  {data.map((item, index) => (
-                    <option
-                      key={item._id}
-                      selected={index === 0}
-                      value={item._id}
-                    >
+                  {subjects.map((item, index) => (
+                    <option key={item._id} value={item._id}>
                       {item.name}
                     </option>
                   ))}
@@ -98,7 +110,7 @@ function NewTask() {
             <button
               className={`px-2 py-1 border-2 rounded-lg flex gap-2 items-center ${
                 activeDateTab === 0
-                  ? "text-white bg-green-a border-[#1d9385]"
+                  ? "text-white bg-green-a border-[#1d9385] dark:border-slate-50"
                   : "text-green-a bg-white"
               }`}
               onClick={() => {
@@ -143,7 +155,9 @@ function NewTask() {
             >
               <FaCalendar
                 className={`${
-                  activeDateTab === 2 ? "text-white" : "text-green-a"
+                  activeDateTab === 2
+                    ? "text-white dark:text-slate-50"
+                    : "text-green-a"
                 }`}
               />
               Інший день
@@ -151,7 +165,11 @@ function NewTask() {
 
             <input
               ref={dateRef}
-              className={`${activeDateTab === 2 ? undefined : "hidden"}`}
+              className={`${
+                activeDateTab === 2
+                  ? "dark:bg-slate-800 dark:text-slate-50"
+                  : "hidden"
+              }`}
               type='date'
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
@@ -159,8 +177,6 @@ function NewTask() {
           </div>
         </div>
       )}
-      {!isTasksLoading && <DashboardTaskList data={tasks} filterQuery={filter} category={false}/>}
-      
     </div>
   )
 }

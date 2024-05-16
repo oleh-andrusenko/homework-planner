@@ -17,7 +17,7 @@ function SubjectItem({ subject }) {
         })
       }}
       key={subject._id}
-      className='flex flex-col text-lg text-gray-700 my-4 '
+      className='flex flex-col text-lg text-gray-700 dark:text-slate-50  my-4 '
     >
       <Link href={`/dashboard/list/${subject._id}`}>
         <div className='flex items-center gap-2'>
@@ -27,7 +27,7 @@ function SubjectItem({ subject }) {
               backgroundColor: subject.color.toLowerCase(),
             }}
           ></div>
-          <span className='hover:text-green-a cursor-pointer text-md truncate ...'>
+          <span className='w-2/3 hover:text-green-a cursor-pointer text-md truncate ...'>
             {subject.name}
           </span>
         </div>

@@ -1,7 +1,8 @@
+import { ToastContainer } from "react-toastify"
 import "./globals.css"
-import Sidebar from "@/components/Sidebar"
-import StoreProvider from "@/components/StoreProvider"
 
+import "react-toastify/dist/ReactToastify.css"
+import SmallThemeSwitcher from "@/components/SmallThemeSwitcher"
 export const metadata = {
   title: "Homework Keeper",
   description: "Keep your homework in one place",
@@ -11,10 +12,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang='en'>
       <body>
-        <StoreProvider>
-          <Sidebar />
-          <div className="ml-[17%] w-[80%]">{children}</div>
-        </StoreProvider>
+        {children}
+        <ToastContainer />
+        <SmallThemeSwitcher />
       </body>
     </html>
   )

@@ -6,7 +6,7 @@ export const subjectsApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000/" }),
   endpoints: (build) => ({
     getSubjects: build.query({
-      query: () => "subjects",
+      query: (id) => `subjects/${id}`,
       providesTags: (result) =>
         result
           ? [

@@ -1,24 +1,26 @@
 "use client"
 import { useCheckTaskMutation, useDeleteTaskMutation } from "@/redux/tasksApi"
+import { useRouter } from "next/navigation"
 import React from "react"
 import { FaTrash } from "react-icons/fa"
 
 function TaskItem({ task }) {
   const { color, name } = task.subject
+  const router = useRouter()
   const [checkTask] = useCheckTaskMutation()
   const [deleteTask] = useDeleteTaskMutation()
 
   const handleCheckTask = async () => {
-    checkTask({ id: task._id, body: { status: !task.isDone } })
+    await checkTask({ id: task._id, body: { status: !task.isDone } }).unwrap()
   }
 
   const handleDeleteTask = async () => {
-    deleteTask(task._id)
+    await deleteTask(task._id).unwrap()
   }
   return (
     <li
       key={task._id}
-      className={`flex gap-2 justify-between items-center bg-white w-full px-4 py-2  my-2 shadow-lg rounded-lg ${
+      className={`flex gap-2 justify-between items-center bg-white dark:bg-slate-800 dark:text-slate-50 w-full px-4 py-2  my-2 shadow-lg rounded-lg ${
         task.isDone &&
         " relative overflow-hidden after:w-2 after:h-full after:bg-green-a after:absolute after:top-0 after:right-0 before:w-2 before:h-full before:bg-green-a before:absolute before:top-0 before:left-0"
       }`}
@@ -27,7 +29,7 @@ function TaskItem({ task }) {
         <input
           type='checkbox'
           checked={task.isDone}
-          className='w-5 h-5'
+          className='w-6 h-6 '
           onChange={handleCheckTask}
         />
       </div>
@@ -41,9 +43,9 @@ function TaskItem({ task }) {
           <div>{name}</div>
         </div>
       </div>
-      <div className='w-[15%] text-green-a'>{task.date.slice(0, 10)}</div>
+      <div className='w-[15%] text-lg text-green-a font-semibold'>{task.date.slice(0, 10)}</div>
       <button onClick={handleDeleteTask}>
-        <FaTrash className='text-red-400' />
+        <FaTrash className='mr-2 text-lg text-red-400' />
       </button>
     </li>
   )

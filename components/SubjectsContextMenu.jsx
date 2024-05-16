@@ -3,11 +3,14 @@ import { FaArchive, FaEdit, FaTrash } from "react-icons/fa"
 import { MdOutlineClose } from "react-icons/md"
 import { useDeleteSubjectMutation } from "@/redux/subjectsApi"
 import { motion } from "framer-motion"
+import { useRouter } from "next/navigation"
 function SubjectsContextMenu({ x, y, clickedItem, closeMenu }) {
   const [deleteSubject] = useDeleteSubjectMutation()
-
+  const router = useRouter()
   const handleDeleteSubject = async (id) => {
     await deleteSubject(id).unwrap()
+    router.replace("/dashboard")
+    router.refresh()
   }
 
   return (

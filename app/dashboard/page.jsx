@@ -1,15 +1,12 @@
-import FocusTimer from "@/components/FocusTimer"
-import NewTask from "@/components/NewTask"
-import Summary from "@/components/Summary"
+import Dashboard from "@/components/Dashboard"
+import Loader from "@/components/Loader"
+import { authConfig } from "@/configs/auth"
+import { getServerSession } from "next-auth"
 
-function DashboardPage() {
-  return (
-    <div className='flex justify-between flex-wrap gap-1 gap-y-4  relative'>
-      <Summary />
-      <FocusTimer />
-      <NewTask />
-    </div>
-  )
+async function DashboardPage() {
+  const session = await getServerSession(authConfig)
+
+  return <Dashboard />
 }
 
 export default DashboardPage

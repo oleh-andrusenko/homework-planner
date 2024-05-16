@@ -9,13 +9,13 @@ import Link from "next/link"
 function Menu() {
   const pathname = usePathname()
   const linkClasses =
-    "flex gap-4 items-center text-lg text-gray-700 my-4 hover:text-green-a cursor-pointer"
+    "flex gap-4 items-center text-lg text-gray-700 dark:text-slate-50  my-4 hover:text-green-a cursor-pointer"
 
   const activeLinkClasses =
     "flex gap-4 items-center text-lg text-green-a my-4 hover:text-green-a cursor-pointer font-semibold"
   return (
     <nav>
-      <ul className='rounded-xl bg-white px-6 py-2'>
+      <ul className='rounded-xl bg-white dark:bg-slate-800 px-6 py-2'>
         <li>
           <Link
             href='/dashboard'
@@ -28,7 +28,7 @@ function Menu() {
         </li>
         <li>
           <Link
-            href='dashboard/list'
+            href='/dashboard/list'
             className={pathname === "/dashboard/list" ? activeLinkClasses : linkClasses}
           >
             <MdOutlinePlaylistAddCheckCircle className='text-xl' />
@@ -38,7 +38,7 @@ function Menu() {
 
         <li>
           <Link
-            href='planner'
+            href='/dashboard/planner'
             className={
               pathname === "/dashboard/planner" ? activeLinkClasses : linkClasses
             }
