@@ -70,26 +70,29 @@ function Summary() {
                     tasks.filter(
                       (task) =>
                         task.date.slice(0, 10) ===
-                        today.toISOString().slice(0, 10)
+                          today.toISOString().slice(0, 10) && !task.isDone
                     ).length
                   }
                 </span>
               </p>
               <div className='w-1/2 border-l-2 border-l-gray-400 px-3 py-2  flex flex-col text-slate-700'>
                 <p className='dark:text-slate-300 text-black py-1 font-semibold'>
-                  Поточні завдання
+                  Останні завдання
                 </p>
-                {tasks.slice(0, 3).map((item, index) => (
-                  <div
-                    style={{
-                      borderColor: item.subject.color,
-                    }}
-                    key={item._id + index}
-                    className='w-3/4 flex gap-2 items-center border-l-[3px]  my-1 px-2 dark:text-slate-50'
-                  >
-                    <span className='truncate ...'>{item.title}</span>
-                  </div>
-                ))}
+                {tasks
+                  .filter((task) => !task.isDone)
+                  .slice(0, 3)
+                  .map((item, index) => (
+                    <div
+                      style={{
+                        borderColor: item.subject.color,
+                      }}
+                      key={item._id + index}
+                      className='w-3/4 flex gap-2 items-center border-l-[3px]  my-1 px-2 dark:text-slate-50'
+                    >
+                      <span className='truncate ...'>{item.title}</span>
+                    </div>
+                  ))}
               </div>
             </>
           )}

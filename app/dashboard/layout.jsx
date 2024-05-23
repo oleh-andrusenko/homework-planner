@@ -1,5 +1,4 @@
 import Sidebar from "@/components/Sidebar"
-import StoreProvider from "@/components/StoreProvider"
 
 export const metadata = {
   title: "Homework Keeper",
@@ -9,10 +8,8 @@ export const metadata = {
 export default function DashboardLayout({ children }) {
   return (
     <>
-      <StoreProvider>
-        <Sidebar />
-        <div className='ml-[17%] w-[80%]'>{children}</div>
-      </StoreProvider>
+      <Sidebar />
+      <div className='ml-[17%] w-[80%]'>{children}</div>
     </>
   )
 }

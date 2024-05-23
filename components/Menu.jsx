@@ -12,7 +12,7 @@ function Menu() {
     "flex gap-4 items-center text-lg text-gray-700 dark:text-slate-50  my-4 hover:text-green-a cursor-pointer"
 
   const activeLinkClasses =
-    "flex gap-4 items-center text-lg text-green-a my-4 hover:text-green-a cursor-pointer font-semibold"
+    "flex gap-4 items-center text-lg text-green-a my-4 hover:text-green-a cursor-pointer font-semibold ml-2"
   return (
     <nav>
       <ul className='rounded-xl bg-white dark:bg-slate-800 px-6 py-2'>

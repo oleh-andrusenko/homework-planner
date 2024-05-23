@@ -1,7 +1,6 @@
 "use client"
 
 import DashboardTaskList from "@/components/DashboardTaskList"
-import NewTask from "@/components/NewTask"
 import { useGetTasksQuery } from "@/redux/tasksApi"
 import { useSession } from "next-auth/react"
 

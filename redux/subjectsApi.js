@@ -33,11 +33,20 @@ export const subjectsApi = createApi({
         { type: "Tasks", id: "LIST" },
       ],
     }),
+    updateSubject: build.mutation({
+      query: ({ id, ...patch }) => ({
+        url: `subjects/${id}`,
+        method: "PUT",
+        body: patch,
+      }),
+      invalidatesTags: [{ type: "Subjects", id: "LIST" }],
+    }),
   }),
 })
 
 export const {
   useGetSubjectsQuery,
   useAddSubjectMutation,
+  useUpdateSubjectMutation,
   useDeleteSubjectMutation,
 } = subjectsApi

@@ -4,6 +4,7 @@ import { MdOutlineClose } from "react-icons/md"
 import { useDeleteSubjectMutation } from "@/redux/subjectsApi"
 import { motion } from "framer-motion"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 function SubjectsContextMenu({ x, y, clickedItem, closeMenu }) {
   const [deleteSubject] = useDeleteSubjectMutation()
   const router = useRouter()
@@ -24,10 +25,7 @@ function SubjectsContextMenu({ x, y, clickedItem, closeMenu }) {
       exit={{
         height: 0,
       }}
-      style={{
-        backgroundColor: "#fff",
-      }}
-      className=' rounded-lg shadow-lg p-2'
+      className=' rounded-lg shadow-lg p-2 bg-white dark:bg-slate-900'
       onClick={closeMenu}
     >
       <motion.ul
@@ -38,17 +36,14 @@ function SubjectsContextMenu({ x, y, clickedItem, closeMenu }) {
         exit={{ opacity: 0, transitionDelay: 0.2 }}
         className='text-sm'
       >
-        <hr />
         <li>
-          <button className='flex items-center gap-1 my-2 hover:text-green-a'>
-            <FaArchive className='text-sm' /> Архівувати
-          </button>
-        </li>
-        <li>
-          <button className='flex items-center gap-1 my-2 hover:text-green-a'>
+          <Link
+            href={`/dashboard/editSubject/${clickedItem._id}`}
+            className='flex items-center gap-1 my-2 hover:text-green-a'
+          >
             <FaEdit />
             Змінити
-          </button>
+          </Link>
         </li>
         <li>
           <button

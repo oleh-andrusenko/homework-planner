@@ -6,7 +6,6 @@ import { useGetTasksQuery } from "@/redux/tasksApi"
 
 import { FaPlay, FaPause, FaStop } from "react-icons/fa"
 import { VscDebugContinue } from "react-icons/vsc"
-import { FaGear } from "react-icons/fa6"
 import { useSession } from "next-auth/react"
 
 function FocusTimer() {
@@ -58,17 +57,20 @@ function FocusTimer() {
   return (
     <div className='relative overflow-hidden dark:text-slate-50  bg-white dark:bg-slate-800 w-2/6 shadow-lg col-span-2 rounded-lg p-4 flex flex-col items-center justify-between'>
       <h3 className='font-bold text-xl m-0 text-green-a'>Таймер фокусування</h3>
-      {!isLoading && tasks.length > 0 && (
+      {!isLoading && tasks.filter((task) => !task.isDone).length > 0 && (
         <select
           defaultValue={tasks[0].title}
           disabled={isRunning || isPaused}
           className='w-3/4 truncate ... text-sm border-b-2 pb-2 text-center bg-transparent'
         >
-          {tasks.map((task) => (
-            <option key={task._id} value={task.title}>
-              {task.title}
-            </option>
-          ))}
+          {tasks.map((task) => {
+            if (!task.isDone)
+              return (
+                <option key={task._id} value={task.title}>
+                  {task.title}
+                </option>
+              )
+          })}
         </select>
       )}
       {!isLoading && tasks.length === 0 && <p>Немає завдань</p>}
@@ -76,7 +78,7 @@ function FocusTimer() {
       <div className='flex items-center gap-2'>
         {!isRunning && !isPaused && (
           <button
-            onClick={() => setMinutes((prev) => (prev <= 0 ? 1 : prev - 5))}
+            onClick={() => setMinutes((prev) => (prev - 5 <= 0 ? 1 : prev - 5))}
             className='text-xl flex items-center justify-center w-10 h-10 rounded-full bg-green-a text-white'
           >
             -
@@ -90,7 +92,6 @@ function FocusTimer() {
           <input
             type='number'
             className='text-5xl  w-16 text-center py-2 bg-transparent '
-            
             min={1}
             max={90}
             value={!isRunning ? minutes : timerMinutes}

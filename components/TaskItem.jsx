@@ -1,8 +1,10 @@
 "use client"
 import { useCheckTaskMutation, useDeleteTaskMutation } from "@/redux/tasksApi"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import React from "react"
-import { FaTrash } from "react-icons/fa"
+import { FaEdit, FaTrash } from "react-icons/fa"
+import { TbBallpen, TbDotsVertical, TbTrash } from "react-icons/tb"
 
 function TaskItem({ task }) {
   const { color, name } = task.subject
@@ -20,9 +22,9 @@ function TaskItem({ task }) {
   return (
     <li
       key={task._id}
-      className={`flex gap-2 justify-between items-center bg-white dark:bg-slate-800 dark:text-slate-50 w-full px-4 py-2  my-2 shadow-lg rounded-lg ${
+      className={`relative flex gap-2 justify-between items-center bg-white dark:bg-slate-800 dark:text-slate-50 w-full px-4 py-2  my-2 shadow-lg rounded-lg ${
         task.isDone &&
-        " relative overflow-hidden after:w-2 after:h-full after:bg-green-a after:absolute after:top-0 after:right-0 before:w-2 before:h-full before:bg-green-a before:absolute before:top-0 before:left-0"
+        "  overflow-hidden after:w-2 after:h-full after:bg-green-a after:absolute after:top-0 after:right-0 before:w-2 before:h-full before:bg-green-a before:absolute before:top-0 before:left-0"
       }`}
     >
       <div className='flex w-[5%]'>
@@ -43,10 +45,22 @@ function TaskItem({ task }) {
           <div>{name}</div>
         </div>
       </div>
-      <div className='w-[15%] text-lg text-green-a font-semibold'>{task.date.slice(0, 10)}</div>
-      <button onClick={handleDeleteTask}>
-        <FaTrash className='mr-2 text-lg text-red-400' />
-      </button>
+      <div className='w-[15%] text-lg text-green-a font-semibold'>
+        {task.date.slice(0, 10)}
+      </div>
+      <div className='group absolute right-4'>
+        <p className='text-2xl group-hover:hidden'>
+          <TbDotsVertical />
+        </p>
+        <div className='hidden group-hover:flex flex-col gap-2'>
+          <button onClick={handleDeleteTask}>
+            <TbTrash  className='mr-2 text-lg text-red-400' />
+          </button>
+          <Link href={`/dashboard/editTask/${task._id}`}>
+            <TbBallpen className='mr-2 text-lg text-amber-400' />
+          </Link>
+        </div>
+      </div>
     </li>
   )
 }

@@ -1,7 +1,7 @@
-"use client"
+import FileUploader from "@/components/FileUpload/FileUploader"
 
 function TestPage() {
-  return <div className='w-screen grid place-content-center py-20'></div>
+  return <FileUploader />
 }
 
 export default TestPage

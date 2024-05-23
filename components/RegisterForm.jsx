@@ -56,7 +56,7 @@ function RegisterForm() {
             type='text'
             errors={errors?.name}
           >
-            Ім'я
+            Ім&apos;я
           </Input>
 
           <Input

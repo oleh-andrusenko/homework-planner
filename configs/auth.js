@@ -22,11 +22,46 @@ export const authConfig = {
         )
 
         if (!passwordsMatch) return null
-        
+
         return user
       },
     }),
   ],
+  callbacks: {
+    async jwt({ token, user, trigger, session }) {
+      console.log("jwt callback", { token, user, session })
+      if (trigger === "update" && session?.name) {
+        token.name = session.name
+        token.picture = session.image
+      }
+
+      if (user) {
+        return {
+          ...token,
+          id: user.id,
+          picture: user.image,
+        }
+      }
+      const updatedUser = await User.findOneAndUpdate(
+        { email: token.email },
+        { name: token.name, image: token.picture }
+      )
+
+      console.log("RES", updatedUser)
+      return token
+    },
+    async session({ session, token, user }) {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id,
+          image: token.picture,
+          name: token.name,
+        },
+      }
+    },
+  },
   session: {
     strategy: "jwt",
   },

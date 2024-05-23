@@ -1,7 +1,6 @@
 "use client"
 import { useGetStatsQuery } from "@/redux/statsApi"
 import { useSession } from "next-auth/react"
-import { motion } from "framer-motion"
 import StatsTile from "./StatsTile"
 import Loader from "./Loader"
 import { IoReload } from "react-icons/io5"
@@ -18,7 +17,7 @@ function ProfileStats() {
 
   if (!isLoading && stats.totalStats.totalTasks === 0)
     return (
-      <p className='px-4 py-6 rounded-lg shadow-lg w-full mt-10 bg-white dark:bg-slate-800'>
+      <p className='px-4 py-6 rounded-lg shadow-lg w-full mt-10 bg-white dark:bg-slate-800 dark:text-slate-50'>
         Для перегляду статистики створіть завдання на панелі завдань...
       </p>
     )
@@ -54,12 +53,6 @@ function ProfileStats() {
                 %
               </p>
             </div>
-            <button
-              className='absolute top-0 right-0 p-2 bg-blue-500 text-white rounded-lg hover:scale-110'
-              onClick={() => refetch()}
-            >
-              <IoReload />
-            </button>
           </div>
         </>
       )}
@@ -71,6 +64,7 @@ function ProfileStats() {
           <div className='flex gap-4 flex-wrap'>
             {stats.subjectsStats.map((item) => (
               <StatsTile
+                key={item.subject._id}
                 title={item.subject}
                 total={item.totalTasks}
                 color={item.subjectColor}

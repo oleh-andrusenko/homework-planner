@@ -1,8 +1,8 @@
-import ErrorPage from "@/app/error"
+
 import { forwardRef } from "react"
 import InputError from "./InputError"
 
-const Input = forwardRef((props, ref) => {
+const Input = forwardRef(function Input(props, ref) {
   const { children, errors, ...otherProps } = props
   return (
     <div className='grid grid-rows-1 grid-cols-4 my-2 w-full relative'>
